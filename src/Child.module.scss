@@ -1,0 +1,7 @@
+ul {
+    $width:200px;
+    .item { 
+        width:$width;
+        background-color: red;
+    }
+}
