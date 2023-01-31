@@ -7,21 +7,37 @@ import UserList from './user-manage/UserList'
 import RoleList from './right-manage/RoleList'
 import RightList from './right-manage/RightList'
 import NoPermission from './nopermission/NoPermission'
+import './NewsSandBox.css'
+
+import { Layout } from 'antd';
+const { Content } = Layout;
 
 export default function NewsSandBox() {
   return (
-    <div>
+    <Layout>
       <SideMenu></SideMenu>  
-			<TopHeader></TopHeader> 
-			<Switch>
-				<Route path="/home" component={Home} />
-				<Route path="/user-manager/list" component={UserList} />
-				<Route path="/right-manager/role/list" component={RoleList} />
-				<Route path="/right-manager/right/list" component={RightList} />
+			<Layout className="site-layout">
+				<TopHeader></TopHeader> 
+				<Content
+          style={{
+            margin: '24px 16px',
+            padding: 24,
+            minHeight: 280,
+            //background: colorBgContainer,
+          }}
+        >
+						Content
+					<Switch>
+						<Route path="/home" component={Home} />
+						<Route path="/user-manager/list" component={UserList} />
+						<Route path="/right-manager/role/list" component={RoleList} />
+						<Route path="/right-manager/right/list" component={RightList} />
 
-				<Redirect from="/" to="Home" exact />
-				<Route path="*" component={NoPermission} />
-			</Switch>
-    </div>
+						<Redirect from="/" to="Home" exact />
+						<Route path="*" component={NoPermission} />
+					</Switch>
+				</Content>
+			</Layout>
+    </Layout>
   )
 }
