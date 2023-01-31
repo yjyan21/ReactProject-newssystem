@@ -17,12 +17,13 @@ export default function NewsSandBox() {
     <Layout>
       <SideMenu></SideMenu>  
 			<Layout className="site-layout">
-				<TopHeader></TopHeader> 
+				<TopHeader style={{backgroundColor:'white'}}>top</TopHeader> 
 				<Content
           style={{
             margin: '24px 16px',
             padding: 24,
             minHeight: 280,
+						backgroundColor:'white',
             //background: colorBgContainer,
           }}
         >
