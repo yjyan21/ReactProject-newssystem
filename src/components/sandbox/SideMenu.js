@@ -1,5 +1,5 @@
-import React from 'react'
-
+import React, {useState} from 'react'
+import './index.css'
 
 import { Layout, Menu } from 'antd';
 import {
@@ -12,10 +12,11 @@ import {
 const { Header, Sider, Content } = Layout;
 
 export default function SideMenu() {
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <Sider trigger={null} collapsible >
-        <div className="logo" />
+    <Sider trigger={null} collapsible collapsed={false} >
+        <div className="logo">News Publish System</div>
         <Menu
           theme="dark"
           mode="inline"
