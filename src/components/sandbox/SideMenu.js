@@ -61,11 +61,12 @@ export default function SideMenu(props) {
         return <SubMenu key={item.key} icon={item.icon} title={item.title} >
           { 
             item.childrenMenu.map(item=>{
-              return <Menu.Item key={item.key} icon={item.icon} onClick={()=>{
-                //navigate(item.key)
-                //console.log(item.key)
-                //props.history.push(item.key)
-              }}><Link to={item.key}>{item.title}</Link></Menu.Item>
+              return (
+                <Menu.Item key={item.key} icon={item.icon} >
+                 <Link to={item.key}>{item.title}</Link>
+                </Menu.Item>
+              )
+               
             })
           }
         </SubMenu>
