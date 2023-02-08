@@ -6,6 +6,8 @@ import {
   UserOutlined,
   HomeOutlined,
   PartitionOutlined,
+  TeamOutlined,
+  ContainerOutlined,
 } from '@ant-design/icons';
 import axios from 'axios'
 
@@ -22,7 +24,7 @@ const menuList = [
    key:"/user-manage",
    title:"User Manage",
    icon:<UserOutlined />,
-   childrenMenu:[
+   children:[
     {
     key:"/user-manage/list",
     title:"User List",
@@ -35,7 +37,7 @@ const menuList = [
     key:"/right-manage",
     title:"Right Manage",
     icon:<PartitionOutlined />,
-    childrenMenu:[
+    children:[
      {
      key:"/right-manage/role/list",
      title:"Role List",
@@ -49,6 +51,30 @@ const menuList = [
     ]
    }
 ]
+const iconList = {
+  "/home":<HomeOutlined />,
+  "/user-manage":<TeamOutlined />,
+  "/user-manage/list":<UserOutlined />,
+  "/right-manage":<PartitionOutlined />,
+  "/right-manage/role/list":<UserOutlined />,
+  "/right-manage/right/list":<UserOutlined />,
+  "/news-manage":<ContainerOutlined />,
+  "/news-manage/list":<PartitionOutlined />,
+  "/news-manage/add":<PartitionOutlined />,
+  "/news-manage/update/:id":<PartitionOutlined />,
+  "/news-manage/preview/:id":<PartitionOutlined />,
+  "/news-manage/draft":<PartitionOutlined />,
+  "/news-manage/category":<PartitionOutlined />,
+  "/audit-manage":<TeamOutlined />,
+  "/audit-manage/audit":<PartitionOutlined />,
+  "/audit-manage/list":<PartitionOutlined />,
+  "/publish-manage":<PartitionOutlined />,
+  "/publish-manage/unpublished":<PartitionOutlined />,
+  "/publish-manage/published":<PartitionOutlined />,
+  "/publish-manage/sunset":<PartitionOutlined />
+
+
+}
 
 export default function SideMenu(props) {
    const [menu, setMenu] = useState([])
@@ -63,25 +89,33 @@ export default function SideMenu(props) {
       setMenu(res.data)
     })
   },[])
+  const checkPagePermission = (item) => {
+    return item.pagepermisson === 1
+  }
   const renderMenu = (menuList) => 
   {
     return (menuList.map(item=>{
-      if(item.childrenMenu){
-        return <SubMenu key={item.key} icon={item.icon} title={item.title} >
+      if(item.children && checkPagePermission(item)){
+        //checkPagePermission后面别忘了加小括号
+        return <SubMenu key={item.key} icon={iconList[item.key]} title={item.title} >
           { 
-            item.childrenMenu.map(item=>{
-              return (
-                <Menu.Item key={item.key} icon={item.icon} >
-                 <Link to={item.key}>{item.title}</Link>
-                </Menu.Item>
-              )
+            // item.children.map(item=>{
+            //   return (
+            //     <Menu.Item key={item.key} icon={item.icon} >
+            //      <Link to={item.key}>{item.title}</Link>
+            //     </Menu.Item>
+            //   )
                
-            })
+            // })
+            //原来是上面的写法，结果接入db.json文件且设置了checkPagePermission()函数之后，页面显示效果没变，
+            //依然是所有的二级目录都显示出来，
+            renderMenu(item.children)
           }
         </SubMenu>
       //上面别忘了return
       }else{
-        return <Menu.Item key={item.key} icon={item.icon} onClick={()=>{
+        return checkPagePermission(item) && <Menu.Item key={item.key} icon={iconList[item.key]} onClick={()=>{
+          //checkPagePermission后面别忘了加小括号
           // navigate(item.key)
            //console.log(item.key)
           //props.history.push(item.key)
