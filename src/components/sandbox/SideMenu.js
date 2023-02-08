@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { Layout, Menu } from 'antd';
 import './index.css'
 import { Link } from 'react-router-dom';
@@ -7,6 +7,7 @@ import {
   HomeOutlined,
   PartitionOutlined,
 } from '@ant-design/icons';
+import axios from 'axios'
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -50,10 +51,18 @@ const menuList = [
 ]
 
 export default function SideMenu(props) {
+   const [menu, setMenu] = useState([])
 //现在SideMenu可以直接收到props,
 //然后const navigate=useNavigate( ) ,Menu里onClick={ props => navigate(props.key) }
 //<Link to="foo">to foo</Link>;
  // const navigate = useNavigate();
+  
+  useEffect(()=>{
+    axios.get("http://localhost:5000/rights?_embed=children").then(res=>{
+      console.log(res.data)
+      setMenu(res.data)
+    })
+  },[])
   const renderMenu = (menuList) => 
   {
     return (menuList.map(item=>{
@@ -104,7 +113,8 @@ export default function SideMenu(props) {
               </SubMenu>
              */}
 
-             {renderMenu(menuList)}
+             {/* {renderMenu(menuList)} */}
+             {renderMenu(menu)}
             </Menu>
         </Sider>
   )
