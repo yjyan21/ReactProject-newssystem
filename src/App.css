@@ -38,3 +38,6 @@
 }
 
 /* li { width:200px;background-color: yellow;} */
+::-webkit-scrollbar {width:5px;height:5px;position:absolute;}
+::-webkit-scrollbar-thumb {background-color: #05529bb6;}
+::-webkit-scrolbar-track {background-color:#ddd}

@@ -1,20 +1,26 @@
 import React, {useEffect, useState} from 'react'
 import { Layout, Menu } from 'antd';
 import './index.css'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import {
   UserOutlined,
   HomeOutlined,
   PartitionOutlined,
   TeamOutlined,
   ContainerOutlined,
+  MonitorOutlined,
+  ProfileOutlined,
+  DeliveredProcedureOutlined,
+  FileExclamationOutlined,
+  FileOutlined,
+  FileExcelOutlined,
 } from '@ant-design/icons';
 import axios from 'axios'
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 //模拟数组结构
-const menuList = [
+/*const menuList = [
   {
     key:"/home",
     title:"Home",
@@ -50,7 +56,7 @@ const menuList = [
       }
     ]
    }
-]
+] */
 const iconList = {
   "/home":<HomeOutlined />,
   "/user-manage":<TeamOutlined />,
@@ -65,18 +71,20 @@ const iconList = {
   "/news-manage/preview/:id":<PartitionOutlined />,
   "/news-manage/draft":<PartitionOutlined />,
   "/news-manage/category":<PartitionOutlined />,
-  "/audit-manage":<TeamOutlined />,
+  "/audit-manage":<MonitorOutlined />,
   "/audit-manage/audit":<PartitionOutlined />,
-  "/audit-manage/list":<PartitionOutlined />,
-  "/publish-manage":<PartitionOutlined />,
-  "/publish-manage/unpublished":<PartitionOutlined />,
-  "/publish-manage/published":<PartitionOutlined />,
-  "/publish-manage/sunset":<PartitionOutlined />
+  "/audit-manage/list":<ProfileOutlined />,
+  "/publish-manage":<DeliveredProcedureOutlined />,
+  "/publish-manage/unpublished":<FileExclamationOutlined />,
+  "/publish-manage/published":<FileOutlined />,
+  "/publish-manage/sunset":<FileExcelOutlined />
 
 
 }
 
 export default function SideMenu(props) {
+   
+   
    const [menu, setMenu] = useState([])
 //现在SideMenu可以直接收到props,
 //然后const navigate=useNavigate( ) ,Menu里onClick={ props => navigate(props.key) }
@@ -95,7 +103,7 @@ export default function SideMenu(props) {
   const renderMenu = (menuList) => 
   {
     return (menuList.map(item=>{
-      if(item.children && checkPagePermission(item)){
+      if(item.children?.length>0 && checkPagePermission(item)){
         //checkPagePermission后面别忘了加小括号
         return <SubMenu key={item.key} icon={iconList[item.key]} title={item.title} >
           { 
@@ -123,33 +131,46 @@ export default function SideMenu(props) {
       }
     }))
   }
+  let history = useHistory()
+  //console.log(history.location.pathname)
+  const slectKeys = [history.location.pathname]
+  
+  const slectKeysNow = "'" + slectKeys[0] + "'"
+  //console.log(slectKeys[0])
+  const openKeys = ["/"+history.location.pathname.split("/")[1]]
   return (
         <Sider trigger={null} collapsible collapsed={false}>
-          <div className="logo">News Publish System</div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-         {/* 
-          
-          
-              <Menu.Item key="1" icon={menuList[0].icon}>
-              nav 1
-              </Menu.Item>
-              <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-              nav 2
-              </Menu.Item>
-              <Menu.Item key="3" icon={<UploadOutlined />}>
-              nav 3
-              </Menu.Item>
-              <SubMenu key="sub4" icon={<SettingOutlined />} title="Navigation Three">
-                <Menu.Item key="g">Option 9</Menu.Item>
-                <Menu.Item key="10">Option 10</Menu.Item>
-                <Menu.Item key="11">Option 11</Menu.Item>
-                <Menu.Item key="12">Option 12</Menu.Item>
-              </SubMenu>
-             */}
+          <div style={{display:'flex',height:'100%',flexDirection:'column'}}>
+            <div className="logo">News Publish System</div>
+            <div style={{flex:1,overflow:'auto'}}>
+              <Menu theme="dark" mode="inline" selectedKeys={slectKeys} 
+              defaultOpenKeys={openKeys}>
+               {console.log(slectKeys)} 
+            {/* 
+              
+              
+                  <Menu.Item key="1" icon={menuList[0].icon}>
+                  nav 1
+                  </Menu.Item>
+                  <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+                  nav 2
+                  </Menu.Item>
+                  <Menu.Item key="3" icon={<UploadOutlined />}>
+                  nav 3
+                  </Menu.Item>
+                  <SubMenu key="sub4" icon={<SettingOutlined />} title="Navigation Three">
+                    <Menu.Item key="g">Option 9</Menu.Item>
+                    <Menu.Item key="10">Option 10</Menu.Item>
+                    <Menu.Item key="11">Option 11</Menu.Item>
+                    <Menu.Item key="12">Option 12</Menu.Item>
+                  </SubMenu>
+                */}
 
-             {/* {renderMenu(menuList)} */}
-             {renderMenu(menu)}
-            </Menu>
+                {/* {renderMenu(menuList)} */}
+                {renderMenu(menu)}
+              </Menu>
+            </div>
+          </div>
         </Sider>
   )
 }

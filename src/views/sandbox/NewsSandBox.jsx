@@ -34,7 +34,7 @@ export default function NewsSandBox() {
 						<Route path="/right-manager/role/list" component={RoleList} />
 						<Route path="/right-manager/right/list" component={RightList} />
 
-						<Redirect from="/" to="Home" exact />
+						<Redirect from="/" to="home" exact />
 						<Route path="*" component={NoPermission} />
 					</Switch>
 				</Content>
