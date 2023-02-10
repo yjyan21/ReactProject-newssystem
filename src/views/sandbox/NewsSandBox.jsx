@@ -25,6 +25,8 @@ export default function NewsSandBox() {
 						padding: 24,
 						minHeight: 280,
 						backgroundColor:'white',
+						
+						overflow:'auto'
             //background: colorBgContainer,
           }}
         >

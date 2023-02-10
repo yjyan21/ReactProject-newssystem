@@ -6,9 +6,13 @@ import axios from 'axios'
 export default function RightList() {
   const [dataSource, setDataSource] = useState([])
   useEffect(()=>{
-    axios.get("http://localhost:5000/rights").then(res=>
-    setDataSource(res.data))
-  })
+    axios.get("http://localhost:5000/rights?_embed=children").then
+    (res=> {
+      let datalist = res.data
+      datalist[0].children = ""
+      setDataSource(res.data)
+    })
+})
   const columns = [
     {
       title: 'ID',
@@ -41,7 +45,10 @@ export default function RightList() {
   ];
   return (
     <div>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={dataSource} columns={columns} 
+       pagination={{
+        pageSize:5
+       }}/>
     </div>
   )
 }
