@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import {Table} from 'antd'
+import {Table, Tag, Button} from 'antd'
+import {DeleteOutlined, EditOutlined} from '@ant-design/icons'
 import axios from 'axios'
 
 export default function RightList() {
@@ -12,6 +13,9 @@ export default function RightList() {
     {
       title: 'ID',
       dataIndex: 'id',
+      render:(id)=>{
+        return <b>{id}</b>
+      }
     },
     {
       title: '权限名称',
@@ -20,10 +24,19 @@ export default function RightList() {
     {
       title: '权限路径',
       dataIndex: 'key',
+      render:(key)=>{
+        return <Tag color="orange">{key}</Tag>
+      }
     },
     {
-      title: 'ID',
-      dataIndex: 'id',
+      title: '操作',
+      render:()=>{
+        return (
+          <div>
+            <Button danger shape="circle" icon={<DeleteOutlined />} />
+            <Button type="primary" shape="circle" icon={<EditOutlined />} />
+          </div>)
+        }
     },
   ];
   return (
