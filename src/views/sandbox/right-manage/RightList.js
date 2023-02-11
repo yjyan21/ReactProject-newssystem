@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import {Table, Tag, Button, Modal} from 'antd'
-import {DeleteOutlined, EditOutlined, ExclamationCircleFilled} from '@ant-design/icons'
+import {Table, Tag, Button, Modal, Popover, Switch} from 'antd'
+import {DeleteOutlined, EditOutlined, 
+  ExclamationCircleFilled, } from '@ant-design/icons'
 
 import axios from 'axios'
 
@@ -48,12 +49,37 @@ export default function RightList() {
             onClick={()=>{ //这里的形参括号里面不能写item,否则传下去的参数就不一样了
               confirmMethod(item);
             }}/>
-            <Button type="primary" shape="circle" icon={<EditOutlined />} />
+            <Popover content={<div style={{textAlign:'center'}}>
+              <Switch defaultChecked={item.pagepermisson} onChange={()=>switchMethod(item)}></Switch>
+            </div>} title="配置项" trigger={item.pagepermisson===1||item.pagepermisson!==undefined?
+            "click":""}>
+              <Button type="primary" shape="circle" icon={<EditOutlined />} 
+              disabled={item.pagepermisson===1||item.pagepermisson!==undefined?false:true} />
+            </Popover>
+            
           </div>)
         }
     },
   ];
+  /* const switchMethod = (item) => {
+    console.log('origin:'+item.pagepermisson)
+    let originDatasource = dataSource;
+    
+    originDatasource.map(data =>{
+        if(data.id == item.id){
+          console.log('origin data-pagepermission:'+data.pagepermisson)
+          data.pagepermisson = !data.pagepermisson
+          console.log('after data-pagepermission:'+data.pagepermisson)
+        }
+      })
+    
+    console.log(item)
+    setDataSource([...originDatasource])
+  } */
+  const switchMethod = item => {
 
+  }
+  
   const confirmMethod = (item) => {
     confirm({
       title: 'Do you Want to delete these items?',
