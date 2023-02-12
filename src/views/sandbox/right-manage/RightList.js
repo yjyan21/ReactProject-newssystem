@@ -77,9 +77,19 @@ export default function RightList() {
     setDataSource([...originDatasource])
   } */
   const switchMethod = item => {
-
+    item.pagepermisson = (item.pagepermisson===1?0:1)
+    setDataSource([...dataSource])
+    if(item.grade===1){
+      axios.patch(`http://localhost:5000/rights/${item.id}`,{
+        pagepermisson:item.pagepermisson
+    })
+    }else{
+      axios.patch(`http://localhost:5000/children/${item.id}`,{
+        pagepermisson:item.pagepermisson
+    })
   }
-  
+  }
+
   const confirmMethod = (item) => {
     confirm({
       title: 'Do you Want to delete these items?',
