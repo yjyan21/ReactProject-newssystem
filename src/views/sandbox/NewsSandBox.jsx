@@ -33,7 +33,7 @@ export default function NewsSandBox() {
 					
 					<Switch>
 						
-						<Route path="/home" component={RightList} />
+						<Route path="/home" component={RoleList} />
 						<Route path="/user-manager/list" component={UserList} />
 						<Route path="/right-manager/role/list" component={RoleList} />
 						<Route path="/right-manager/right/list" component={RightList} />
