@@ -8,6 +8,7 @@ const { confirm } = Modal;
 
 export default function RoleList() {
   const [dataSource, setDataSource] = useState([])
+  const [isModalOpen, setisModalOpen] = useState(false)
   const columns = [
     {
       title: 'ID',
@@ -21,14 +22,17 @@ export default function RoleList() {
       dataIndex: 'roleName',
     },
     {
-      title: '操作',
+      title: '权限分配',
       render:(item)=>{
         return (
           <div>
             <Button danger shape="circle" icon={<DeleteOutlined />} 
-            onClick={()=>
-            confirmMethod(item)}/>
-            <Button type="primary" shape="circle" icon={<UnorderedListOutlined />} />
+              onClick={()=>
+                confirmMethod(item)}/>
+            <Button type="primary" shape="circle" icon={<UnorderedListOutlined />} 
+              onClick={()=>{
+                setisModalOpen(true)
+              }}/>
             
             
           </div>)
@@ -65,12 +69,22 @@ export default function RoleList() {
       
   },[])
 
+  const handleOk = () => {
 
+  }
+  const handleCancel = () => {
+    setisModalOpen(false)
+  }
 
   return (
     <div>
       <Table dataSource={dataSource} columns={columns}
        rowKey={item=>item.id}></Table>
+       <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
     </div>
   )
 }
