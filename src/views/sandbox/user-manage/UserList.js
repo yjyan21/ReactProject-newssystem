@@ -1,18 +1,20 @@
-import React, {useState, useEffect} from 'react'
-import {Table, Button, Modal, Switch, Form, Input, Select} from 'antd'
+import React, {useState, useEffect, useRef} from 'react'
+import {Table, Button, Modal, Switch, Form } from 'antd'
+import UserForm from '../../../components/user-manage/UserForm'
 import {DeleteOutlined, EditOutlined, 
   ExclamationCircleFilled, } from '@ant-design/icons'
 
 import axios from 'axios'
 
 const { confirm } = Modal;
-const {Option} = Select;
+
 
 export default function UserList() {
   const [dataSource, setDataSource] = useState([])
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [roleList, setroleList] = useState([])
   const [regionList, setRegionList] = useState([])
+  const addForm = useRef(null)
 
   useEffect(() => {
     axios.get("http://localhost:5000/users?_expand=role").then
@@ -95,9 +97,28 @@ export default function UserList() {
   };
   const deleteMethod = (item) => {
     //console.log(item)
-   
+    setDataSource(dataSource.filter(data=>data.id!==item.id))
+    axios.delete(`http://localhost:5000/users/${item.id}`)
 
   }
+  const addFormOk = () => {
+    addForm.current.validateFields().then(value=>{
+      //console.log(value)
+      setIsAddOpen(false)
+      addForm.current.resetFields() //表单内容重置
+      //post到后端，生成id，再设置 datasource，方便后面的删除和更新
+      axios.post(`http://localhost:5000/users`,{
+        ...value,
+        "roleState": true,
+        "default": false
+        }).then(res=>{
+          console.log(res .data)
+          setDataSource([...dataSource, res.data])
+        }).catch(err=>{
+            console.log(err)
+        })
+     })
+   }
 
   return (
     <div>
@@ -111,7 +132,7 @@ export default function UserList() {
        rowKey={(item)=>item.id}
        />
 
-<Modal
+    <Modal
       open={isAddOpen}
       title="Add User Profile"
       okText="Submit"
@@ -119,81 +140,10 @@ export default function UserList() {
       onCancel={()=>{
         setIsAddOpen(false)
       }}
-      onOk={() => {
-        // form
-        //   .validateFields()
-        //   .then((values) => {
-        //     form.resetFields();
-        //     onCreate(values);
-        //   })
-        //   .catch((info) => {
-        //     console.log('Validate Failed:', info);
-        //   });
-      }}
+      onOk={()=>addFormOk() }
     >
-        <Form
-          layout="vertical" //这句用来控制lable文字和输入框是否左右水平排列；
-
-        >
-          <Form.Item
-            name="username"
-            label="UserName"
-            rules={[
-              {
-                required: true,
-                message: 'Please input the title of collection!',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            label="Password"
-            rules={[
-              {
-                required: true,
-                message: 'Please input the title of collection!',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="region"
-            label="Region"
-            rules={[
-              {
-                required: true,
-                message: 'Please input the title of collection!',
-              },
-            ]}
-          >
-            <Select>
-              {regionList.map((item)=>{
-                return <Option value={item.value} key={item.id}>{item.value}</Option>
-              })}
-            </Select>
-          </Form.Item>
-          <Form.Item
-            name="roleId"
-            label="Role"
-            rules={[
-              {
-                required: true,
-                message: 'Please input the title of collection!',
-              },
-            ]}
-          >
-            <Select>
-              {roleList.map((item)=>{
-                return <Option value={item.id} key={item.id}>{item.roleName}</Option>
-              })}
-            </Select>
-          </Form.Item>
-          
-        
-      </Form>
+        <UserForm roleList={roleList} regionList={regionList}
+          ref={addForm}></UserForm>
     </Modal>
 
     </div>
