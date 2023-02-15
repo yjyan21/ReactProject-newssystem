@@ -113,7 +113,11 @@ export default function UserList() {
         "default": false
         }).then(res=>{
           console.log(res .data)
-          setDataSource([...dataSource, res.data])
+          setDataSource([...dataSource, {
+            ...res.data,
+            role:roleList.filter(item=>
+              item.id===value.roleId)[0]
+          }])
         }).catch(err=>{
             console.log(err)
         })
