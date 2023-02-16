@@ -1,13 +1,17 @@
-import React,{forwardRef, useState} from 'react'
+import React,{forwardRef, useEffect, useState} from 'react'
 import {Form, Input, Select } from 'antd'
 const {Option} = Select
 
 const UserForm = forwardRef((props, ref)=> {
 	const [isDisable, setIsDisable] = useState(false)
+    useEffect(()=>{
+      setIsDisable(props.isUpdateDisabled)
+    },[props.isUpdateDisabled])
+
   return (
     <div>
           <Form
-						  ref={ref}
+			  ref={ref}
               layout="vertical" //这句用来控制lable文字和输入框是否左右水平排列；
 
           >
