@@ -7,6 +7,40 @@ const UserForm = forwardRef((props, ref)=> {
     useEffect(()=>{
       setIsDisable(props.isUpdateDisabled)
     },[props.isUpdateDisabled])
+    const {roleId,region} = JSON.parse(localStorage.getItem("token"))
+    const roleObj = {
+        "1":"superadmin",
+        "2":"admin",
+        "3":"editor"
+      }
+    const checkRegionDisabled = (item) => {
+			if(props.isUpdate){ //如果是更新用户信息
+				if(roleObj[roleId]==="superadmin"){
+					 return false 
+				}else{
+					return true
+				}}else{ //如果是添加新用户
+					if(roleObj[roleId]==="superadmin"){
+						return false 
+				 }else{
+					 return item.value!==region
+				 }
+				}
+    }
+		const checkRoleDisabled = (item) => {
+			if(props.isUpdate){
+				if(roleObj[roleId]==="superadmin"){
+					 return false 
+				}else{
+					return true
+				}}else{
+					if(roleObj[roleId]==="superadmin"){
+						return false 
+				 }else{
+					 return roleObj[item.id]!=="editor"
+				 }
+				}
+    }
 
   return (
     <div>
@@ -51,7 +85,9 @@ const UserForm = forwardRef((props, ref)=> {
               >
                   <Select disabled={isDisable}>
                       {props.regionList.map((item) => {
-                          return <Option value={item.value} key={item.id}>{item.value}</Option>
+                          return <Option value={item.value} key={item.id}
+													//这里的retrun不能省略，老师那里并不是省了，假如只有一句代码可以不写return
+                          disabled={checkRegionDisabled(item)} >{item.title}</Option>
                       })}
                   </Select>
               </Form.Item>
@@ -76,7 +112,10 @@ const UserForm = forwardRef((props, ref)=> {
 										}
 									}}>
                       {props.roleList.map((item) => {
-                          return <Option value={item.id} key={item.id}>{item.roleName}</Option>
+                          return <Option value={item.id} key={item.id}
+													disabled={checkRoleDisabled(item)}>
+														{item.roleName}
+														</Option>
                       })}
                   </Select>
               </Form.Item>
