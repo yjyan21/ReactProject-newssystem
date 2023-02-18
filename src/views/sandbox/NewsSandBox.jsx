@@ -1,19 +1,21 @@
 import React from 'react'
-import { Switch, Route, Redirect } from 'react-router-dom'
 import SideMenu from '../../components/sandbox/SideMenu'
 import TopHeader from '../../components/sandbox/TopHeader'
-
-import Home from './home/Home'
-import UserList from './user-manage/UserList'
-import RoleList from './right-manage/RoleList'
-import RightList from './right-manage/RightList'
-import NoPermission from './nopermission/NoPermission'
+import NewsRouter from '../../components/sandbox/NewsRouter'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 import './NewsSandBox.css'
 
 import { Layout } from 'antd';
+import { useEffect } from 'react'
+
 const { Content } = Layout;
 
 export default function NewsSandBox() {
+	NProgress.start()
+	useEffect(()=>{
+		NProgress.done()
+	})
   return (
     <Layout>
       <SideMenu></SideMenu>  
@@ -30,17 +32,8 @@ export default function NewsSandBox() {
             //background: colorBgContainer,
           }}
         >
+				<NewsRouter></NewsRouter>	
 					
-					<Switch>
-						
-						<Route path="/home" component={UserList} />
-						<Route path="/user-manager/list" component={UserList} />
-						<Route path="/right-manager/role/list" component={RoleList} />
-						<Route path="/right-manager/right/list" component={RightList} />
-
-						<Redirect from="/" to="home" exact />
-						<Route path="*" component={NoPermission} />
-					</Switch>
 				</Content>
 			</Layout>
     </Layout>
