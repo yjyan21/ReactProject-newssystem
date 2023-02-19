@@ -1,18 +1,29 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect, useRef} from 'react'
 import {PageHeader} from '@ant-design/pro-layout'
-import { Steps, Button } from 'antd';
-import style from './News.css'
+import { Steps, Button, Form, Input, Select } from 'antd';
+import style from './News.module.css'
+import axios from 'axios';
+const {Option} = Select
 
 export default function NewsAdd() {
   //const description = 'This is a description.';
   
-  const [current, setCurrent] = useState(2)
+  const [current, setCurrent] = useState(0)
+  const [categoryList,setCategoryList] = useState([])
   const handlePrevious = () => {
     setCurrent(current-1)
   }
   const handleNext = () => {
     setCurrent(current+1)
   }
+  const NewsForm = useRef(null)
+  useEffect(()=>{
+    axios.get("/categories").then(res=>{ //因为之前封装过路径，所以get后面只需要写categories
+      setCategoryList(res.data)
+      console.log(categoryList)
+    }
+      )
+  })
   return (
     <div>
       <PageHeader
@@ -39,8 +50,61 @@ export default function NewsAdd() {
         ]}
       />
       
-      <div className={current===0?'':style.active}>1111111
-        <input type="text"/>
+      <div style={{marginTop:'25px'}}>
+      <div className={current===0?'':style.active}>
+        <Form
+          name="basic"
+          // ref="NewsForm"
+          labelCol={{
+            span: 3,
+          }}
+          wrapperCol={{
+            span: 21,
+          }}
+          style={{
+            maxWidth: '600px', //原来这里写的600px
+          }}
+          initialValues={{
+            remember: true,
+          }}
+          // onFinish={onFinish}
+          // onFinishFailed={onFinishFailed}
+          // autoComplete="off"
+        >
+          <Form.Item
+            label="Title"
+            name="title"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your username!',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Category"
+            name="categoryId"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your username!',
+              },
+            ]}
+          >
+            <Select>
+              {
+                categoryList.map(item=>{
+                 return <Option value={item.id} key={item.id}>{item.title}</Option>
+                 //别忘了写return
+                })
+              }
+            </Select>
+          </Form.Item>
+
+        </Form>
       </div>
       <div className={current===1?'':style.active}>22222
         <input type="text"/>
@@ -48,8 +112,9 @@ export default function NewsAdd() {
       <div className={current===2?'':style.active}>3333
         <input type="text"/>
       </div>
+      </div>
 
-      <div style={{marginTop:'50px'}}>
+      <div style={{marginTop:'25px'}}>
         {
           current>0 && <span>
             <Button type="primary" onClick={()=>handlePrevious()}>上一步</Button>
