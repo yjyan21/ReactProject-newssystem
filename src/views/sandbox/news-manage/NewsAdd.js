@@ -3,6 +3,7 @@ import {PageHeader} from '@ant-design/pro-layout'
 import { Steps, Button, Form, Input, Select } from 'antd';
 import style from './News.module.css'
 import axios from 'axios';
+import NewsEditor from '../../../components/news-manage/NewsEditor';
 const {Option} = Select
 
 export default function NewsAdd() {
@@ -115,10 +116,10 @@ export default function NewsAdd() {
 
         </Form>
       </div>
-      <div className={current===1?'':style.active}>22222
-        <input type="text"/>
+      <div className={current===1?'':style.active}>
+        <NewsEditor></NewsEditor>
       </div>
-      <div className={current===2?'':style.active}>3333
+      <div className={current===2?'':style.active}>
         <input type="text"/>
       </div>
       </div>
