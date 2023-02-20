@@ -14,13 +14,22 @@ export default function NewsAdd() {
     setCurrent(current-1)
   }
   const handleNext = () => {
-    setCurrent(current+1)
+    if(current===0){
+      NewsForm.current.validateFields().then(res=>{
+        console.log(res)
+        setCurrent(current+1)
+      }).catch(error=>
+        console.log(error))
+    }else{
+      setCurrent(current+1)
+    }
+    
   }
   const NewsForm = useRef(null)
   useEffect(()=>{
     axios.get("/categories").then(res=>{ //因为之前封装过路径，所以get后面只需要写categories
       setCategoryList(res.data)
-      console.log(categoryList)
+      //console.log(categoryList)
     }
       )
   })
@@ -54,7 +63,7 @@ export default function NewsAdd() {
       <div className={current===0?'':style.active}>
         <Form
           name="basic"
-          // ref="NewsForm"
+          ref={NewsForm}
           labelCol={{
             span: 3,
           }}
