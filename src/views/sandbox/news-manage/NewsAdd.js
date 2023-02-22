@@ -61,11 +61,11 @@ export default function NewsAdd(props) {
       "view":0
       // "publishTime":0
     }).then(res=>{
-      props.history.push(auditState===0?"/news-manage/darft":"/audit-manage/list")
+      props.history.push(auditState===0?"/news-manage/draft":"/audit-manage/list")
       notification.info({
         message:`Alert`, //为什么不是单引号？
         description:
-        `You could go to${auditState===0?'Draft Box':'Audit List' } to check you News content`,
+        `You could go to ${auditState===0?'Draft Box':'Audit List' } to check you News content`,
         placement:"bottomRight",
     })
   })
@@ -162,7 +162,7 @@ export default function NewsAdd(props) {
         }}></NewsEditor>
       </div>
       <div className={current===2?'':style.active}>
-        <input type="text"/>
+        {/* <input type="text"/> */}
       </div>
       </div>
 
