@@ -1,28 +1,39 @@
 import React,{useState, useEffect, useRef} from 'react'
 import {PageHeader} from '@ant-design/pro-layout'
-import { Steps, Button, Form, Input, Select } from 'antd';
+import { Steps, Button, Form, Input, Select, message, notification } from 'antd';
 import style from './News.module.css'
 import axios from 'axios';
 import NewsEditor from '../../../components/news-manage/NewsEditor';
 const {Option} = Select
 
-export default function NewsAdd() {
+export default function NewsAdd(props) {
   //const description = 'This is a description.';
   
   const [current, setCurrent] = useState(0)
   const [categoryList,setCategoryList] = useState([])
+
+  const [formInfo, setFormInfo] = useState({})
+  const [content, setContent] = useState("")
+
+  const User = JSON.parse(localStorage.getItem("token"))
   const handlePrevious = () => {
     setCurrent(current-1)
   }
   const handleNext = () => {
     if(current===0){
       NewsForm.current.validateFields().then(res=>{
-        console.log(res)
+        //console.log(res)
+        setFormInfo(res)
         setCurrent(current+1)
       }).catch(error=>
         console.log(error))
     }else{
-      setCurrent(current+1)
+      if(content == "" || content.trim()=="<p></p>"){
+        message.error("Please input something.")
+      }else{
+        //console.log(formInfo, content)
+         setCurrent(current+1)
+      }
     }
     
   }
@@ -34,6 +45,34 @@ export default function NewsAdd() {
     }
       )
   })
+
+  
+  const handleSave = (auditState) => {
+    axios.post('/news',{
+      ...formInfo,
+      "content": content,
+      "region": User.region?User.region:"全球",
+      "author":User.username,
+      "roleId": User.roleId,
+      "auditState": auditState,
+      "publishstate":0,
+      "createTime": Date.now(),
+      "star":0,
+      "view":0
+      // "publishTime":0
+    }).then(res=>{
+      props.history.push(auditState===0?"/news-manage/darft":"/audit-manage/list")
+      notification.info({
+        message:`Alert`, //为什么不是单引号？
+        description:
+        `You could go to${auditState===0?'Draft Box':'Audit List' } to check you News content`,
+        placement:"bottomRight",
+    })
+  })
+      
+  }
+  
+
   return (
     <div>
       <PageHeader
@@ -117,7 +156,10 @@ export default function NewsAdd() {
         </Form>
       </div>
       <div className={current===1?'':style.active}>
-        <NewsEditor></NewsEditor>
+        <NewsEditor getContent={(value)=>{
+         //console.log(value)
+         setContent(value)
+        }}></NewsEditor>
       </div>
       <div className={current===2?'':style.active}>
         <input type="text"/>
@@ -132,8 +174,8 @@ export default function NewsAdd() {
         }
         {
           current === 2 && <span>
-            <Button type="primary">Save Draft</Button>
-            <Button danger>Submit to Audit</Button>
+            <Button type="primary" onClick={()=>handleSave(0)}>Save Draft</Button>
+            <Button danger  onClick={()=>handleSave(1)}>Submit to Audit</Button>
             </span>
         }
         {
