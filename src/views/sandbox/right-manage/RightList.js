@@ -20,7 +20,7 @@ export default function RightList() {
       })
       setDataSource(res.data)
     })
-})
+})//这里确定不需要加一个依赖的数组吗？
   const columns = [
     {
       title: 'ID',
