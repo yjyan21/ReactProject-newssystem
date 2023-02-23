@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import {Table, Tag, Button, Modal} from 'antd'
+import {Table, Button, Modal} from 'antd'
 import {DeleteOutlined, EditOutlined, 
-  ExclamationCircleFilled, } from '@ant-design/icons'
+  ExclamationCircleFilled, UploadOutlined} from '@ant-design/icons'
 
 import axios from 'axios'
 
@@ -13,12 +13,12 @@ export default function NewsDraft() {
 
   //news?author=${username}&auditState=0&_expand=category
 
-//   useEffect(()=>{
-//     axios.get(`/news?author=${username}&auditState=0&_expand=category`).then
-//     (res=> {
-//       setDataSource(res.data)
-//     })
-// },[username])//这里确定不需要加一个依赖的数组吗？
+  useEffect(()=>{
+    axios.get(`/news?author=${username}&auditState=0&_expand=category`).then
+    (res=> {
+      setDataSource(res.data)
+    })
+},[username])//这里确定不需要加一个依赖的数组吗？
   const columns = [
     {
       title: 'ID',
@@ -52,7 +52,8 @@ export default function NewsDraft() {
               confirmMethod(item);
             }}/>
             
-            <Button type="primary" shape="circle" icon={<EditOutlined />} />
+            <Button shape="circle" icon={<EditOutlined />} />
+            <Button type="primary" shape="circle" icon={<UploadOutlined />} />
             
           </div>)
         }
@@ -76,7 +77,7 @@ export default function NewsDraft() {
   const deleteMethod = (item) => {
     //console.log(item)
       setDataSource(dataSource.filter(data => data.id !== item.id))
-      axios.delete(`http://localhost:5000/rights/${item.id}`)
+      axios.delete(`/news/${item.id}`)
   }
 
   return (
@@ -84,7 +85,9 @@ export default function NewsDraft() {
       <Table dataSource={dataSource} columns={columns} 
        pagination={{
         pageSize:5
-       }}/>
+       }}
+       rowKey={item=>item.id}
+       />
     </div>
   )
 }
