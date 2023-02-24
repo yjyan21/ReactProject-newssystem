@@ -65,7 +65,7 @@ export default function NewsAdd(props) {
       notification.info({
         message:`Alert`, //为什么不是单引号？
         description:
-        `You could go to ${auditState===0?'Draft Box':'Audit List' } to check you News content`,
+        `You could go to ${auditState===0?'[Draft Box]':'[Audit List]' } to check you News content`,
         placement:"bottomRight",
     })
   })

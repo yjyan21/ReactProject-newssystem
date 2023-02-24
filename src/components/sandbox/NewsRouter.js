@@ -14,6 +14,8 @@ import Unpublished from '../../views/sandbox/publish-manage/Unpublished'
 import Published from '../../views/sandbox/publish-manage/Published'
 import Sunset from '../../views/sandbox/publish-manage/Sunset'
 import axios from 'axios'
+import NewsPreview from '../../views/sandbox/news-manage/NewsPreview'
+import NewsUpdate from '../../views/sandbox/news-manage/NewsUpdate'
 
 const localRouterMap = {
 	"/home":Home,
@@ -23,7 +25,9 @@ const localRouterMap = {
 	"/news-manage/add": NewsAdd,
 	"/news-manage/draft": NewsDraft,
 	"/news-manage/category":NewsCategory,
-  "/audit-manage/audit":Audit,
+	"/news-manage/preview/:id":NewsPreview,
+	"/news-manage/update/:id":NewsUpdate,
+    "/audit-manage/audit":Audit,
 	"/audit-manage/list":AuditList,
 	"/publish-manage/unpublished":Unpublished,
 	"/publish-manage/published":Published,
@@ -40,11 +44,12 @@ export default function NewsRouter() {
 				//注意，上面是data,单词别写错
 			})
 	},[])
+
 	const {role:{rights}} = JSON.parse(localStorage.getItem("token"))
 	const checkRoute = (item) => {
 		//console.log(item.key)
 		//console.log(localRouterMap["/home"])
-		return (localRouterMap[item.key] && item.pagepermisson) 
+		return (localRouterMap[item.key] && (item.pagepermisson || item.routepermisson)) 
 	}
 	const checkUserPermission = (item) => {
 		return rights.includes(item.key)

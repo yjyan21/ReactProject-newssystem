@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {Table, Button, Modal} from 'antd'
+import {Table, Button, Modal, notification} from 'antd'
 import {DeleteOutlined, EditOutlined, 
   ExclamationCircleFilled, UploadOutlined} from '@ant-design/icons'
 
@@ -7,7 +7,7 @@ import axios from 'axios'
 
 const { confirm } = Modal;
 
-export default function NewsDraft() {
+export default function NewsDraft(props) {
   const [dataSource, setDataSource] = useState([])
   const {username} = JSON.parse(localStorage.getItem("token"))
 
@@ -30,6 +30,9 @@ export default function NewsDraft() {
     {
       title: 'News Title',
       dataIndex: 'title',
+      render:(title,item)=>{
+        return <a href={`#/news-manage/preview/${item.id}`}>{title}</a>
+      }
     },
     {
       title: 'News Author',
@@ -52,14 +55,33 @@ export default function NewsDraft() {
               confirmMethod(item);
             }}/>
             
-            <Button shape="circle" icon={<EditOutlined />} />
-            <Button type="primary" shape="circle" icon={<UploadOutlined />} />
+            <Button shape="circle" icon={<EditOutlined />} 
+              onClick={()=>{
+                props.history.push(`/news-manage/update/${item.id}`)
+              }}
+            />
+            <Button type="primary" shape="circle" icon={<UploadOutlined />} 
+              onClick={()=>{handleCheck(item.id)}}/>
             
           </div>)
         }
     },
   ];
  
+  const handleCheck = (id) => {
+    axios.patch(`/news/${id}`,{
+      auditState:1
+    }).then(res=>{
+      props.history.push("/audit-manage/list")
+      notification.info({
+        message:`Alert`, //为什么不是单引号？
+        description:
+        `You could go to [Audit List] to check you News content`,
+        placement:"bottomRight",
+    })
+  })
+  }
+
   const confirmMethod = (item) => {
     confirm({
       title: 'Do you Want to delete these items?',
