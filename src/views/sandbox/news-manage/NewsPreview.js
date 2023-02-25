@@ -15,6 +15,7 @@ export default function NewsPreview(props) {
 		
 		const auditStateList = ["未审核","审核中","已通过","未通过"]
 		const publishStateList = ["未发布","待发布","已上线","已下线"]
+		const colorList = ["black","orange","green","red"]
 
   return (
     <div>
@@ -34,11 +35,12 @@ export default function NewsPreview(props) {
 						.format('YYYY-MM-DD HH:mm:ss'):"--"}</Descriptions.Item>
 					<Descriptions.Item label="Region">{newsInfo.region}</Descriptions.Item>
 					<Descriptions.Item label="Audit status">
-						<span style={{color:'red'}}>{auditStateList[newsInfo.auditState]}</span>
+						<span style={{color:colorList[newsInfo.auditState]}}>{auditStateList[newsInfo.auditState]}</span>
 					</Descriptions.Item>
 					<Descriptions.Item label="Publish status">
-						<span style={{color:'red'}}>{publishStateList[newsInfo.publishstate]}</span>
-						{/* 开始这个数据一致不显示，后来发现db.json文件中这里单词都是小写publishstate; */}
+						<span style={{color:colorList[newsInfo.publishState]}}>{publishStateList[newsInfo.publishState]}</span>
+						
+						{/* 开始这个数据一致不显示，后来发现db.json文件中这里单词都是小写publishstate; 其实不是都是，有错误的*/}
 					</Descriptions.Item>
 					<Descriptions.Item label="Number of Visit">
 						<span style={{color:'#00ff00'}}>{newsInfo.view}</span>

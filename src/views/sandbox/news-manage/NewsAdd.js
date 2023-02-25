@@ -55,7 +55,7 @@ export default function NewsAdd(props) {
       "author":User.username,
       "roleId": User.roleId,
       "auditState": auditState,
-      "publishstate":0,
+      "publishState":0,
       "createTime": Date.now(),
       "star":0,
       "view":0
