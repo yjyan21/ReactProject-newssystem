@@ -16,6 +16,7 @@ import {
   FileExcelOutlined,
 } from '@ant-design/icons';
 import axios from 'axios'
+import {connect} from 'react-redux'
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -82,7 +83,7 @@ const iconList = {
 
 }
 
-export default function SideMenu(props) {
+function SideMenu(props) {
    
    
    const [menu, setMenu] = useState([])
@@ -142,7 +143,7 @@ export default function SideMenu(props) {
   //console.log(slectKeys[0])
   const openKeys = ["/"+history.location.pathname.split("/")[1]]
   return (
-        <Sider trigger={null} collapsible collapsed={false}>
+        <Sider trigger={null} collapsible collapsed={props.isCollapsed}>
           <div style={{display:'flex',height:'100%',flexDirection:'column'}}>
             <div className="logo">News Publish System</div>
             <div style={{flex:1,overflow:'auto'}}>
@@ -177,4 +178,10 @@ export default function SideMenu(props) {
         </Sider>
   )
 }
-//export default withRouter(SideMenu)
+//export default withRouter(SideMenu) 做redux之前老师是这么写的，但是我没有在外面包裹withRouter,
+//而是直接在最上面 export default function SideMenu(){}
+const mapStateToProps = ({CollApsedReducer:{isCollapsed}}) => ({
+    isCollapsed //省略了return关键字
+})
+export default connect(mapStateToProps)(SideMenu)
+//写好这个页面之后，左导航发生了变化，详情看Note

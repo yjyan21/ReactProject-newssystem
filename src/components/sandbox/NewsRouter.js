@@ -16,6 +16,8 @@ import Sunset from '../../views/sandbox/publish-manage/Sunset'
 import axios from 'axios'
 import NewsPreview from '../../views/sandbox/news-manage/NewsPreview'
 import NewsUpdate from '../../views/sandbox/news-manage/NewsUpdate'
+import {Spin} from 'antd'
+import { connect } from 'react-redux'
 
 const localRouterMap = {
 	"/home":Home,
@@ -34,7 +36,7 @@ const localRouterMap = {
 	"/publish-manage/sunset":Sunset
 }
 
-export default function NewsRouter() {
+function NewsRouter(props) {
 	const [BackRouteList,setBackRouteList] = useState([])
 	useEffect(()=>{
 		Promise.all([
@@ -56,6 +58,7 @@ export default function NewsRouter() {
 	}
   return (
     <div>
+	 <Spin size='large' spinning={props.isLoading}>
       <Switch>
 				{/* <Route path="/home" component={Home} />
 				<Route path="/user-manage/list" component={UserList} />
@@ -80,7 +83,14 @@ export default function NewsRouter() {
 				{/* <Route path="*" component={NoPermission} /> */}
 				{ BackRouteList.length>0 && <Route path="*" component={NoPermission} />}
 				{/* 上面这么写就不会因为数据还没加载上来而显示403了； */}
-			</Switch>
+	  </Switch>
+	 </Spin>
     </div>
   )
 }
+const mapStateToProps = ({LoadingReducer:{isLoading}}) => {
+	return {
+	  isLoading
+	}
+  }
+export default connect(mapStateToProps)(NewsRouter)
