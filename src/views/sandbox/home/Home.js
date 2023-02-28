@@ -1,6 +1,6 @@
 import React,{useEffect, useState, useRef} from 'react'
 import { Card, Col, Row, List, Avatar, Drawer} from 'antd';
-import {SettingOutlined, EditOutlined, EllipsisOutlined} from '@ant-design/icons'
+import {PieChartOutlined, EditOutlined, EllipsisOutlined} from '@ant-design/icons'
 import * as Echarts from 'echarts'
 import _ from 'lodash'
 import axios from 'axios'
@@ -178,7 +178,7 @@ export default function Home() {
             }
           
           actions={[
-            <SettingOutlined key="setting" 
+            <PieChartOutlined key="setting" 
               onClick={()=>{
                 setVisible(true) //原处这句是放在setTimeout里面，结果我这里还是有bug，弹幕中是放到外面就行
                                  //
