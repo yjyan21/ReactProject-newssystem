@@ -128,7 +128,7 @@ export default function Home() {
       },
       series: [
         {
-          name: '发布新闻数量',
+          name: 'Number of Published News',
           type: 'pie',
           radius: '50%',
           data: list,
